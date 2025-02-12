@@ -18,7 +18,7 @@ public class RabbitMQUndeliveredOrderConsumer {
     @RabbitListener(queues = RabbitMQConfig.UNDELIVERED_QUEUE_NAME, messageConverter = "converter")
     public void receiveMessage(Order order) throws InterruptedException {
         System.out.println("Received message: " + order);
-        ///  Delivery boy will take some time
+        ///  Order Processing will take time here
         Thread.sleep(10000);
         producer.sendMessage(order);
     }
