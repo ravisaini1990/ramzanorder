@@ -4,6 +4,7 @@ import com.ravi.ramzanorder.modal.Order;
 import com.ravi.ramzanorder.modal.UserDTO;
 import com.ravi.ramzanorder.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -24,6 +25,7 @@ public class OrderController {
         return orderService.getOrders();
     }
 
+    @Cacheable(value = "myCache", key = "#email")
     @GetMapping("/order/user/{email}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     List<Order> getOrderById(@PathVariable String email) {
@@ -42,12 +44,14 @@ public class OrderController {
         return orderService.placeOrder(order);
     }
 
+    @Cacheable(value = "myCache", key = "#orderId")
     @PutMapping("/order/cancelOrder/{orderId}")
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     ResponseEntity<Object> cancelOrder(@PathVariable int orderId) {
         return ResponseEntity.ok().body(orderService.cancelOrder(orderId));
     }
 
+    @Cacheable(value = "myCache", key = "#email")
     @GetMapping("/order/fetch_user/{email}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDTO> getUserByEmail(@PathVariable String email) {
