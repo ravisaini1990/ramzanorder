@@ -94,13 +94,14 @@ public class OrderServiceImpl implements OrderService {
         }
         //String url = "http://localhost:8081/user/" + email;
         ///or with eurekaServer registry - so that its safe even after deployment port change , service name will be same so will handle it without any issues
+        ///  if using direct endpoint url with port remove LoadBalanced annotation from Rest template
         String url = "http://RAMZANAUTHSERVICE/user/" + email;
         try {
             ResponseEntity<UserDTO> response = restTemplate.exchange(url, HttpMethod.GET, null, UserDTO.class);
             /// to get value from product micro services - for testing
-            // String url1 = "http://localhost:8080/product/" + "1";
-            //ResponseEntity<String> response1 = restTemplate.exchange(url1, HttpMethod.GET, null, String.class);
-            //logger.info("Resonse of product <<<<{}", response1);
+             String url1 = "http://RAMZAN/product/" + "1";
+            ResponseEntity<String> response1 = restTemplate.exchange(url1, HttpMethod.GET, null, String.class);
+            logger.info("Resonse of product <<<<{}", response1);
             return ResponseEntity.ok(response.getBody());
         } catch (HttpClientErrorException e) {
             throw new ResponseStatusException(e.getStatusCode(), "Failed to fetch user: " + e.getResponseBodyAsString());
