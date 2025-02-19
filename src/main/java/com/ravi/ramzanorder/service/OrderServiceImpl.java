@@ -92,7 +92,9 @@ public class OrderServiceImpl implements OrderService {
         if (email == null || email.trim().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email cannot be null or empty");
         }
-        String url = "http://localhost:8081/user/" + email;
+        //String url = "http://localhost:8081/user/" + email;
+        //or with eurekaServer registory
+        String url = "http://RAMZANAUTHSERVICE/user/" + email;
         try {
             ResponseEntity<UserDTO> response = restTemplate.exchange(url, HttpMethod.GET, null, UserDTO.class);
             /// to get value from product micro services - for testing
